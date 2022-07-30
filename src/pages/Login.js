@@ -6,6 +6,8 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [password, setPassword] = useState("");
 
   const emailHandler = (e) => {
@@ -18,11 +20,31 @@ const Login = () => {
     setPassword(passwordValue);
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     // log the user in, and report invalidation
-    login(email, password);
-    navigate("/");
+    try {
+      await login(email, password); // if it throws an error, it would be caught below
+      navigate("/"); // navigate to the home page
+    } catch (error) {
+      console.log(error.code);
+      console.log(error.message);
+      switch (error.code) {
+        case "auth/wrong-password":
+          setPasswordError("Password is wrong");
+          break;
+        case "auth/invalid-email":
+          setEmailError("Invalid email");
+          break;
+          case "auth/user-not-found":
+          setEmailError("Email not found");
+          break;
+        default:
+          console.log("no error code matched for ", error.code);
+          break;
+      }
+    }
+ 
   };
 
   return (
@@ -33,17 +55,21 @@ const Login = () => {
       <input
         name="email-field"
         type="email"
+        className={emailError ? "input-error" : ""}
         value={email}
         onChange={emailHandler}
       />
+      {emailError && <div className="error-message">{emailError}</div>}
       {/* password */}
       <label htmlFor="password-field">Password</label>
       <input
         name="password-field"
         type="password"
+        className={passwordError ? "input-error" : ""}
         value={password}
         onChange={passwordHandler}
       />
+       {passwordError && <div className="error-message">{passwordError}</div>}
       {/* submit button */}
       <button type="submit">Login</button>
       <div>

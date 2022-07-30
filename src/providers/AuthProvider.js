@@ -1,5 +1,5 @@
 import React, { useState, createContext, useContext } from "react";
-import { signUp } from "../firebase";
+import { signUp, logIn } from "../firebase";
 
 const AuthContext = createContext();
 
@@ -23,13 +23,13 @@ const AuthProvider = ({ children }) => {
     setUser(newUser);
   };
 
-  const login = (email, password) => {
+  const login = async (email, password) => {
     // try to login with the provided email and password
     // successfull login
-    const u = {
-      email,
-    };
-    setUser(u);
+      const u = await logIn(email,password)
+       setUser(u);
+ 
+    
     // failed login
   };
 
