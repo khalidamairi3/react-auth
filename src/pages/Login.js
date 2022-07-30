@@ -4,7 +4,7 @@ import { useAuth } from "../providers/AuthProvider";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login} = useAuth();
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -47,7 +47,7 @@ const Login = () => {
  
   };
 
-  return (
+  return  (
     <form onSubmit={submitHandler}>
       <h2>Login</h2>
       {/* email */}
